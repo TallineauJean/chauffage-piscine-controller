@@ -45,8 +45,11 @@ void loop(){
     temperature.releverTemperatureSurSonde(listeTemperatures);
     float temperatureAir = listeTemperatures[0];
     float temperatureEau = listeTemperatures[1];
+
+    char log[38];
+    snprintf(log, 38, "Temp eau -> %.2f -- Temp air -> %.2f", temperatureEau, temperatureAir);
     
-    Serial.println("Temp eau -> %.2f -- Temp air -> %.2f", temperatureEau, temperatureAir);
+    Serial.println(log);
   
 }
 
