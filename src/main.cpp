@@ -3,8 +3,13 @@
 #include <ArduinoHttpClient.h>
 #include <temperature.h>
 #include <http.h>
+#include <analogWrite.h>
 
 #define LED_PIN 2
+
+#define RGB_G 12
+#define RGB_B 13
+#define RGB_R 14
 
 // preferences -> https://www.tutorialspoint.com/esp32_for_iot/esp32_for_iot_preferences.htm
 // ESPasync -> https://github.com/me-no-dev/ESPAsyncWebServer
@@ -36,6 +41,10 @@ void setup(){
   Serial.print("Local ESP32 IP: ");
   Serial.println(WiFi.localIP());
 
+  pinMode(RGB_R, OUTPUT);
+  pinMode(RGB_G, OUTPUT);
+  pinMode(RGB_B, OUTPUT);
+
 }
 
 void loop(){
@@ -49,6 +58,23 @@ void loop(){
     char log[38];
     snprintf(log, 38, "Temp eau -> %.2f -- Temp air -> %.2f", temperatureEau, temperatureAir);
     
+
+    int diffTemp = temperatureAir - temperatureEau;
+    if(diffTemp > 0){
+      analogWrite(RGB_R, 128, 128);
+      analogWrite(RGB_G, 0, 128);
+      analogWrite(RGB_B, 0, 128);
+    } else if (diffTemp < 0){
+      analogWrite(RGB_R, 0, 128);
+      analogWrite(RGB_G, 128, 128);
+      analogWrite(RGB_B, 0, 128);
+    } else {
+      analogWrite(RGB_R, 0, 128);
+      analogWrite(RGB_G, 0, 128);
+      analogWrite(RGB_B, 128, 128);
+    }
+
+
     Serial.println(log);
   
 }
