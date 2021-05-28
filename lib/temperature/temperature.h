@@ -8,8 +8,9 @@ class Temperature {
     private:
         OneWire oneWire;
         DallasTemperature sensors;
+        DeviceAddress sondeEauEntree;
+        DeviceAddress sondeEauSortie;
         DeviceAddress sondeAir;
-        DeviceAddress sondeEau;
         
     public: 
         void releverTemperatureSurSonde(float listeTemperature[2]);

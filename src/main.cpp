@@ -49,28 +49,29 @@ void setup(){
 
 void loop(){
     delay(1000);
-    float listeTemperatures[2];
+    float listeTemperatures[3];
 
     temperature.releverTemperatureSurSonde(listeTemperatures);
-    float temperatureAir = listeTemperatures[0];
-    float temperatureEau = listeTemperatures[1];
+    float temperatureEauEntree = listeTemperatures[0];
+    float temperatureEauSortie = listeTemperatures[1];
+    float temperatureAir = listeTemperatures[2];
 
-    char log[38];
-    snprintf(log, 38, "Temp eau -> %.2f -- Temp air -> %.2f", temperatureEau, temperatureAir);
+    char log[74];
+    snprintf(log, 74, "Temp eau entrée -> %.2f -- Temp eau sortie -> %.2f -- Temp air -> %.2f", temperatureEauEntree, temperatureEauSortie, temperatureAir);
     
 
-    int diffTemp = temperatureAir - temperatureEau;
-    if(diffTemp > 0){
+    int gain = temperatureEauSortie - temperatureEauEntree;
+    if(gain > 0){
       analogWrite(RGB_R, 128, 128);
-      analogWrite(RGB_G, 0, 128);
+      analogWrite(RGB_G, 50, 128);
       analogWrite(RGB_B, 0, 128);
-    } else if (diffTemp < 0){
-      analogWrite(RGB_R, 0, 128);
+    } else if (gain < 0){
+      analogWrite(RGB_R, 50, 128);
       analogWrite(RGB_G, 128, 128);
       analogWrite(RGB_B, 0, 128);
     } else {
       analogWrite(RGB_R, 0, 128);
-      analogWrite(RGB_G, 0, 128);
+      analogWrite(RGB_G, 50, 128);
       analogWrite(RGB_B, 128, 128);
     }
 
