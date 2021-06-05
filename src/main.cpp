@@ -81,7 +81,7 @@ void setup(){
 }
 
 void loop(){
-    delay(10000);
+    delay(1000);
     float listeTemperatures[3];
 
     temperature.releverTemperatureSurSonde(listeTemperatures);
@@ -95,4 +95,5 @@ void loop(){
     char data[18];
     snprintf(data, 18, "%.2f;%.2f;%.2f", temperatureEauEntree, temperatureEauSortie, temperatureAir);
     ws.textAll(String(data));
+    ws.cleanupClients();
 }
