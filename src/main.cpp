@@ -6,6 +6,7 @@
 #include <analogWrite.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
+#include <Preferences.h>
 
 // preferences -> https://www.tutorialspoint.com/esp32_for_iot/esp32_for_iot_preferences.htm
 // ESPasync -> https://github.com/me-no-dev/ESPAsyncWebServer
@@ -17,6 +18,7 @@ const char *password = "WntcVavEGakkVjRHTD";
 Temperature temperature;
 WiFiClient wifi;
 HttpClient httpClient = HttpClient(wifi, "192.168.1.16", 8888);
+Preferences preferences;
 
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
@@ -88,12 +90,15 @@ void loop(){
     float temperatureEauEntree = listeTemperatures[0];
     float temperatureEauSortie = listeTemperatures[1];
     float temperatureAir = listeTemperatures[2];
+
+    boolean isPompeActive = temperatureEauSortie > temperatureEauEntree && temperatureEauEntree < 28.0; 
     
+
     // WS
     ws.onEvent(onEvent);
     server.addHandler(&ws);
-    char data[18];
-    snprintf(data, 18, "%.2f;%.2f;%.2f", temperatureEauEntree, temperatureEauSortie, temperatureAir);
+    char data[25];
+    snprintf(data, 25, "%.2f;%.2f;%.2f;%s", temperatureEauEntree, temperatureEauSortie, temperatureAir, isPompeActive ? "1" : "0");
     ws.textAll(String(data));
     ws.cleanupClients();
 }
